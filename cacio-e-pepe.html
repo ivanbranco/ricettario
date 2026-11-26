@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spaghetti cacio e pepe</title>
+<style>
+  :root { --ink:#222; --muted:#666; --accent:#8a4b16; --bg:#fbf8f3; --line:#e4dccf; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.55 Georgia, "Times New Roman", serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; font-style: italic; }
+  .back { font:14px system-ui,sans-serif; color:var(--accent); text-decoration:none; }
+  .meta { font:14px system-ui,sans-serif; color:var(--muted); margin:-12px 0 20px; }
+  h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-top: 32px; }
+  .controls { display:flex; flex-wrap:wrap; gap:18px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; font-family: system-ui, sans-serif; font-size:15px; }
+  .servings { display:flex; align-items:center; gap:8px; }
+  .servings button { width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--bg); font-size:20px; cursor:pointer; }
+  .servings input { width:56px; text-align:center; font-size:17px; padding:4px; border:1px solid var(--line); border-radius:6px; }
+  .units label { margin-right:10px; cursor:pointer; }
+  table { width:100%; border-collapse: collapse; margin-top: 12px; }
+  td { padding: 7px 4px; border-bottom: 1px dotted var(--line); vertical-align: top; }
+  td.qty { width: 42%; font-weight: bold; white-space: nowrap; }
+  td .alt { font-weight: normal; color: var(--muted); font-size: .9em; }
+  .opt { color: var(--muted); font-size: .9em; }
+  ol li { margin-bottom: 10px; }
+  .q { font-weight: bold; }
+  .note { background:#fff; border-left: 3px solid var(--accent); padding: 10px 14px; margin-top: 12px; font-size: .95em; }
+  /* Occorrente: strumenti necessari, come etichette */
+  .occ { list-style:none; padding:0; margin:12px 0 0; display:flex; flex-wrap:wrap; gap:6px 8px; font:15px system-ui,sans-serif; }
+  .occ li { background:#fff; border:1px solid var(--line); border-radius:999px; padding:3px 12px; }
+  /* Valori nutrizionali a porzione (stima) */
+  .nutri { font:14px/1.5 system-ui,sans-serif; color:var(--muted); margin:10px 0 0; }
+  .nutri b { color:var(--ink); }
+  @media print { .controls button, .back { display:none; } body { background:#fff; } }
+  .shop { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin-top:16px; font-family:system-ui,sans-serif; font-size:15px; }
+  .shop button { padding:8px 14px; border:1px solid var(--accent); background:var(--accent); color:#fff; border-radius:8px; font-size:15px; cursor:pointer; margin-right:8px; }
+  .shop button.sec { background:#fff; color:var(--accent); }
+  .shop textarea { width:100%; height:9em; margin-top:10px; padding:8px; border:1px solid var(--line); border-radius:6px; font:14px/1.4 ui-monospace,Consolas,monospace; }
+  .shop .ok { color:var(--muted); font-size:13px; }
+  @media print { .shop { display:none; } }
+  /* Termini tecnici: sottolineati a tratteggio, spiegazione al passaggio del mouse o al tocco */
+  .term { border-bottom:1px dashed var(--accent); cursor:help; }
+  .term:focus { outline:none; background:#f3e9dc; }
+  .tip { position:fixed; z-index:10; max-width:min(300px, calc(100vw - 16px)); background:#2b2b2b; color:#fff; font:14px/1.45 system-ui,sans-serif; padding:8px 11px; border-radius:7px; box-shadow:0 4px 14px rgba(0,0,0,.2); pointer-events:none; }
+  .tip[hidden] { display:none; }
+  @media print { .term { border-bottom:none; } .tip { display:none; } }
+  .testa { display:flex; gap:18px; align-items:flex-start; }
+  .testa > div { flex:1; min-width:0; }
+  .foto { flex:none; width:132px; margin:6px 0 0; }
+  .foto img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:cover; border-radius:8px; background:var(--line); }
+  .foto figcaption { font:10.5px/1.3 system-ui,sans-serif; color:var(--muted); margin-top:4px; }
+  .foto figcaption a { color:inherit; white-space:nowrap; }
+  @media (max-width:520px) { .foto { width:84px; } }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="index.html">← Indice</a>
+  <div class="testa">
+    <div>
+      <h1>Spaghetti cacio e pepe</h1>
+      <p class="sub">Pasta romana con pecorino e pepe nero: una crema ottenuta solo con formaggio e acqua di cottura.</p>
+      <p class="meta">4 porzioni · Preparazione 15 min · Cottura 15 min · Difficoltà media · Fonte: <a href="https://ricette.giallozafferano.it/Spaghetti-Cacio-e-Pepe.html">GialloZafferano</a></p>
+    </div>
+    <!-- Foto: quadratino a lato del titolo; clic = foto grande su Commons. Se non si carica (offline) sparisce -->
+    <figure class="foto">
+      <a href="https://commons.wikimedia.org/wiki/File:Tonnarelli_cacio_e_pepe.jpg" title="Apri la foto grande su Wikimedia Commons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Tonnarelli_cacio_e_pepe.jpg/330px-Tonnarelli_cacio_e_pepe.jpg"
+             width="330" height="248" alt="Piatto di tonnarelli cacio e pepe"
+             onerror="this.closest('figure').remove()"></a>
+      <figcaption>Foto: <a href="https://commons.wikimedia.org/wiki/File:Tonnarelli_cacio_e_pepe.jpg">Camelia.boban</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it">CC BY-SA 4.0</a></figcaption>
+    </figure>
+  </div>
+
+  <div class="controls">
+    <div class="servings">
+      <span>Porzioni</span>
+      <button type="button" id="minus" aria-label="Meno porzioni">−</button>
+      <input type="number" id="srv" min="1" max="40" value="4">
+      <button type="button" id="plus" aria-label="Più porzioni">+</button>
+    </div>
+    <div class="units" id="units" hidden>
+      <span>Unità:</span>
+      <label><input type="radio" name="u" value="both" checked> grammi + cucchiai</label>
+      <label><input type="radio" name="u" value="g"> solo grammi/ml</label>
+      <label><input type="radio" name="u" value="spoon"> solo cucchiai</label>
+    </div>
+  </div>
+
+  <h2>Ingredienti</h2>
+  <table id="ing"></table>
+  <p class="nutri" id="nutri"></p>
+
+  <div class="shop">
+    <button type="button" id="shopCopy">Copia lista della spesa</button>
+    <button type="button" id="shopShare" class="sec">Invia (Telegram…)</button>
+    <span class="ok" id="shopOk"></span>
+    <textarea id="shopTxt" readonly aria-label="Lista della spesa"></textarea>
+  </div>
+
+  <h2>Occorrente</h2>
+  <ul class="occ">
+    <li>pentola capiente</li>
+    <li>padella larga antiaderente</li>
+    <li>grattugia</li>
+    <li>ciotola</li>
+    <li>frusta</li>
+    <li>pinze da cucina</li>
+    <li>mestolo</li>
+    <li>batticarne o macinapepe</li>
+  </ul>
+
+  <h2>Procedimento</h2>
+  <ol>
+    <li>Metti sul fuoco una pentola con circa <b>metà dell'acqua</b> che useresti di solito: sarà più ricca di amido. Grattugia il pecorino (<span class="q" data-ref="pecorino"></span>) in una ciotola, tenendone da parte un po' per l'<span class="term" data-def="Impiattare: disporre il cibo nel piatto da portare in tavola, con le ultime rifiniture (qui pecorino e pepe).">impiattamento</span>.</li>
+    <li>A bollore, sala poco e cuoci gli spaghetti (<span class="q" data-ref="spaghetti"></span>).</li>
+    <li>Pesta grossolanamente il pepe (<span class="q" data-ref="pepe"></span>) con un batticarne, oppure usa il macinino a grana grossa.</li>
+    <li><span class="term" data-def="Tostare: scaldare un ingrediente in padella asciutta (o con pochissimo grasso), mescolando, finché sprigiona il suo aroma.">Tosta</span> il pepe in una padella larga antiaderente a fuoco dolce, mescolando. <span class="term" data-def="Sfumare: versare un liquido (vino, brodo, acqua) nella padella calda: sfrigola, evapora in parte e scioglie gli aromi rimasti sul fondo.">Sfumalo</span> con un paio di mestoli di acqua di cottura.</li>
+    <li>Scola la pasta <b>2–3 minuti prima</b> del tempo indicato sulla confezione, conservando l'acqua, e trasferiscila in padella.</li>
+    <li>Termina la cottura in padella "<span class="term" data-def="Risottare la pasta: finire di cuocerla in padella come un risotto, aggiungendo poca acqua di cottura alla volta. La pasta rilascia amido e si forma una crema.">risottando</span>": aggiungi acqua calda un po' alla volta, solo quando il fondo è quasi asciutto, mescolando con le pinze.</li>
+    <li>A questo punto (non prima) prepara la crema: versa un mestolo di acqua calda sul pecorino e mescola energicamente con la frusta. Deve risultare più pastosa che liquida. Se è pronta in anticipo, tienila sopra la pentola calda per non farla raffreddare.</li>
+    <li><b>Spegni il fuoco</b>, unisci la crema alla pasta e mescola con le pinze. Regola la cremosità con altro pecorino o poca acqua di cottura.</li>
+    <li>Servi subito con il pecorino messo da parte e pepe macinato al momento.</li>
+  </ol>
+
+  <div class="note">
+    <b>Grumi:</b> dipendono da troppa acqua o da temperature troppo alte; amalgama la crema in ciotola, non in padella, a fuoco spento.<br>
+    <b>Per iniziare:</b> prova con metà dose, la crema è più facile da gestire.<br>
+    <b>Pasta:</b> a Roma la scelta classica sono i tonnarelli (o gli spaghetti); le linguine si possono usare, ma non sono quelle tradizionali.<br>
+    <b>Varianti:</b> pasta corta (mezze maniche, rigatoni) o pici; un po' di scorza di limone nella crema alleggerisce. Il parmigiano al posto del pecorino funziona, ma il sapore non è quello autentico.<br>
+    <b>Pepe:</b> metà può essere aggiunto alla fine, per un aroma più vivo.<br>
+    <b>Conservazione:</b> da consumare subito.
+  </div>
+</main>
+
+<script id="meta" type="application/json">
+{ "nome":"Spaghetti cacio e pepe", "categoria":"Primi", "tempo":"30 min", "porzioni":4, "difficolta":"Media", "tag":["pasta","pecorino","romana"] }
+</script>
+<script>
+// base: 4 porzioni. g = grammi/ml; spoon = [quantità, "cucchiaio"|"cucchiaino"]; pcs = pezzi (step = arrotondamento)
+const BASE = 4;
+const ING = [
+  { key:"spaghetti", shop:"spaghettoni", alt:["tonnarelli","spaghetti","linguine"], name:"spaghettoni grossi (in alternativa tonnarelli, spaghetti o linguine)", g:320, unit:"g", nut:[353,12,71,1.5] },
+  { key:"pecorino",  shop:"pecorino romano", name:"Pecorino Romano DOP, stagionatura media, da grattugiare", g:200, unit:"g", nut:[387,26,0.2,32] },
+  { key:"pepe",      shop:"pepe nero", name:"pepe nero in grani", g:5, unit:"g", nut:[251,10,39,3.3] }
+];
+
+const srv = document.getElementById('srv');
+const tbl = document.getElementById('ing');
+if (ING.some(i => i.spoon)) document.getElementById('units').hidden = false;
+
+function fmtNum(x){
+  if (x >= 100) return String(Math.round(x/5)*5);
+  if (x >= 10) return String(Math.round(x));
+  const r = Math.round(x*10)/10;
+  return String(r).replace('.', ',');
+}
+function fmtSpoon(n, kind){
+  const q = Math.max(0.25, Math.round(n*4)/4);
+  const whole = Math.floor(q), frac = q - whole;
+  const fr = {0:"",0.25:"¼",0.5:"½",0.75:"¾"}[frac];
+  const num = (whole ? whole : "") + fr || "¼";
+  const plural = q > 1 ? (kind === "cucchiaio" ? "cucchiai" : "cucchiaini") : kind;
+  return num + " " + plural;
+}
+function pcsRound(n, step){
+  step = step || 1;
+  return Math.max(step, Math.round(n/step)*step);
+}
+function fmtPcs(n, step){
+  const r = pcsRound(n, step);
+  const whole = Math.floor(r), half = r - whole >= 0.5;
+  return (whole ? whole : "") + (half ? "½" : "");
+}
+
+function render(){
+  let s = parseInt(srv.value, 10);
+  if (!s || s < 1) s = 1;
+  const f = s / BASE;
+  const mode = document.querySelector('input[name=u]:checked').value;
+  let html = "";
+  const qtyOf = {};
+  for (const i of ING){
+    let main = "", alt = "";
+    if (i.pcs !== undefined){
+      main = fmtPcs(i.pcs * f, i.step);
+      alt = "≈ " + fmtNum(pcsRound(i.pcs*f, i.step) * i.gEach) + " g";
+      if (mode === "spoon") alt = "";
+    } else {
+      const g = fmtNum(i.g * f) + " " + i.unit;
+      if (i.spoon){
+        const sp = fmtSpoon(i.spoon[0] * f, i.spoon[1]);
+        if (mode === "g") main = g;
+        else if (mode === "spoon") main = sp;
+        else { main = g; alt = sp; }
+      } else main = g;
+    }
+    qtyOf[i.key] = main;
+    html += `<tr><td class="qty">${main}${alt ? ` <span class="alt">(${alt})</span>` : ""}</td>` +
+            `<td>${i.name}${i.opt ? ' <span class="opt">— facoltativo</span>' : ""}</td></tr>`;
+  }
+  tbl.innerHTML = html;
+  document.querySelectorAll('[data-ref]').forEach(el => el.textContent = qtyOf[el.dataset.ref]);
+}
+
+document.getElementById('minus').onclick = () => { srv.value = Math.max(1, (parseInt(srv.value,10)||1) - 1); render(); };
+document.getElementById('plus').onclick  = () => { srv.value = Math.min(40, (parseInt(srv.value,10)||0) + 1); render(); };
+srv.addEventListener('input', render);
+document.querySelectorAll('input[name=u]').forEach(r => r.addEventListener('change', render));
+
+// ---- Lista della spesa (testo semplice) ----
+const NOME = JSON.parse(document.getElementById('meta').textContent).nome;
+const shopBox = document.getElementById('shopTxt');
+function shopName(i){
+  const n = i.shop || i.name.replace(/\s*\(.*?\)/g,'').split(',')[0].trim(), a = i.alt || [];
+  return a.length ? n + " (o " + (a.length > 1 ? a.slice(0, -1).join(", ") + " o " + a[a.length - 1] : a[0]) + ")" : n;
+}
+function fmtQty(v, unit){
+  if (v >= 1000) return String(Math.round(v/100)/10).replace('.', ',') + (unit === "ml" ? " l" : " kg");
+  return fmtNum(v) + " " + unit;
+}
+function shopText(){
+  let s = parseInt(srv.value, 10); if (!s || s < 1) s = 1;
+  const f = s / BASE;
+  const lines = ING.map(i => "• " + shopName(i) + ": " +
+    (i.pcs !== undefined ? fmtPcs(i.pcs*f, i.step) : fmtQty(i.g*f, i.unit)) + (i.opt ? " (facoltativo)" : ""));
+  return "Lista della spesa\n" + NOME + " (" + s + " porzioni)\n\n" + lines.join("\n");
+}
+function updShop(){ shopBox.value = shopText(); }
+function flash(m){ const o = document.getElementById('shopOk'); o.textContent = m; setTimeout(() => o.textContent = "", 2500); }
+document.getElementById('shopCopy').onclick = async () => {
+  let ok = false;
+  try { await navigator.clipboard.writeText(shopBox.value); ok = true; }
+  catch(e){ shopBox.select(); try { ok = document.execCommand('copy'); } catch(e2){} }
+  flash(ok ? "Copiata!" : "Selezionala e copiala a mano");
+};
+document.getElementById('shopShare').onclick = async () => {
+  const t = shopBox.value;
+  // Il menu di condivisione di sistema solo su telefono/tablet: su Windows non elenca Telegram
+  const mobile = /Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && matchMedia('(pointer: coarse)').matches);
+  if (mobile && navigator.share) { navigator.share({ text: t }).catch(() => {}); return; }
+  // Su PC: copia il testo (riserva) e apri la condivisione di Telegram (app desktop o Telegram Web) col testo già pronto
+  try { await navigator.clipboard.writeText(t); } catch(e){ shopBox.select(); try { document.execCommand('copy'); } catch(e2){} }
+  flash("Scegli la chat in Telegram (il testo è anche copiato)");
+  window.open("https://t.me/share/url?url=" + encodeURIComponent(t), "_blank");
+};
+srv.addEventListener('input', updShop);
+document.getElementById('minus').addEventListener('click', updShop);
+document.getElementById('plus').addEventListener('click', updShop);
+render();
+updShop();
+</script>
+<script>
+// ---- Termini tecnici: <span class="term" data-def="spiegazione">parola</span> ----
+(() => {
+  const tip = document.createElement('div');
+  tip.className = 'tip'; tip.id = 'tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true;
+  document.body.append(tip);
+  function show(el){
+    tip.textContent = el.dataset.def; tip.hidden = false;
+    const r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    const x = Math.max(8, Math.min(r.left + r.width/2 - w/2, innerWidth - w - 8));
+    const y = r.top - h - 8 < 8 ? r.bottom + 8 : r.top - h - 8;   // sopra la parola, sotto se non c'è spazio
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  const hide = () => { tip.hidden = true; };
+  document.querySelectorAll('.term').forEach(el => {
+    el.tabIndex = 0;                       // tocco su telefono e tastiera
+    el.setAttribute('aria-describedby', 'tip');
+    el.addEventListener('mouseenter', () => show(el));
+    el.addEventListener('mouseleave', () => { if (document.activeElement !== el) hide(); });
+    el.addEventListener('focus', () => show(el));
+    el.addEventListener('blur', hide);
+  });
+  addEventListener('scroll', () => { if (document.activeElement?.classList.contains('term')) document.activeElement.blur(); hide(); }, { passive:true });
+})();
+</script>
+<script>
+// ---- Valori nutrizionali a porzione (stima) ----
+// nut = [kcal, proteine, carboidrati, grassi] per 100 g (per 100 ml se unit è "ml"); resa = parte che si mangia (default 1)
+(() => {
+  const somma = list => list.reduce((s, i) => {
+    const q = (i.pcs !== undefined ? i.pcs * i.gEach : i.g) * (i.resa ?? 1) / BASE / 100;
+    return s.map((v, k) => v + i.nut[k] * q);
+  }, [0, 0, 0, 0]);
+  const conNut = ING.filter(i => i.nut);
+  if (!conNut.length) return;
+  const kc = x => Math.round(x / 10) * 10, g = x => Math.round(x);
+  const [kcal, p, c, gr] = somma(conNut.filter(i => !i.opt));
+  let html = `<b>A porzione: ${kc(kcal)} kcal</b> · proteine ${g(p)} g · carboidrati ${g(c)} g · grassi ${g(gr)} g` +
+             ` <span class="opt">(stima indicativa, da tabelle per ingredienti crudi)</span>`;
+  for (const i of conNut.filter(i => i.opt))
+    html += `<br><span class="opt">+ ${kc(somma([i])[0])} kcal con ${i.shop} (facoltativo)</span>`;
+  document.getElementById('nutri').innerHTML = html;
+})();
+</script>
+</body>
+</html>

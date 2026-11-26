@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пататник (Patatnik) rodopiano con formaggio</title>
+<style>
+  :root { --ink:#222; --muted:#666; --accent:#8a4b16; --bg:#fbf8f3; --line:#e4dccf; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.55 Georgia, "Times New Roman", serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; font-style: italic; }
+  h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-top: 32px; }
+  .controls { display:flex; flex-wrap:wrap; gap:18px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; font-family: system-ui, sans-serif; font-size:15px; }
+  .servings { display:flex; align-items:center; gap:8px; }
+  .servings button { width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--bg); font-size:20px; cursor:pointer; }
+  .servings input { width:56px; text-align:center; font-size:17px; padding:4px; border:1px solid var(--line); border-radius:6px; }
+  .units label { margin-right:10px; cursor:pointer; }
+  table { width:100%; border-collapse: collapse; margin-top: 12px; }
+  td { padding: 7px 4px; border-bottom: 1px dotted var(--line); vertical-align: top; }
+  td.qty { width: 42%; font-weight: bold; white-space: nowrap; }
+  td .alt { font-weight: normal; color: var(--muted); font-size: .9em; }
+  .opt { color: var(--muted); font-size: .9em; }
+  ol li { margin-bottom: 10px; }
+  .q { font-weight: bold; }
+  .note { background:#fff; border-left: 3px solid var(--accent); padding: 10px 14px; margin-top: 12px; font-size: .95em; }
+  /* Occorrente: strumenti necessari, come etichette */
+  .occ { list-style:none; padding:0; margin:12px 0 0; display:flex; flex-wrap:wrap; gap:6px 8px; font:15px system-ui,sans-serif; }
+  .occ li { background:#fff; border:1px solid var(--line); border-radius:999px; padding:3px 12px; }
+  /* Valori nutrizionali a porzione (stima) */
+  .nutri { font:14px/1.5 system-ui,sans-serif; color:var(--muted); margin:10px 0 0; }
+  .nutri b { color:var(--ink); }
+  .back { font:14px system-ui,sans-serif; color:var(--accent); text-decoration:none; }
+  .meta { font:14px system-ui,sans-serif; color:var(--muted); margin:-12px 0 20px; }
+  .testa { display:flex; gap:18px; align-items:flex-start; }
+  .testa > div { flex:1; min-width:0; }
+  .foto { flex:none; width:132px; margin:6px 0 0; }
+  .foto img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:cover; border-radius:8px; background:var(--line); }
+  .foto figcaption { font:10.5px/1.3 system-ui,sans-serif; color:var(--muted); margin-top:4px; }
+  .foto figcaption a { color:inherit; white-space:nowrap; }
+  @media (max-width:520px) { .foto { width:84px; } }
+  @media print { .back { display:none; } .controls button { display:none; } body { background:#fff; } }
+  .shop { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin-top:16px; font-family:system-ui,sans-serif; font-size:15px; }
+  .shop button { padding:8px 14px; border:1px solid var(--accent); background:var(--accent); color:#fff; border-radius:8px; font-size:15px; cursor:pointer; margin-right:8px; }
+  .shop button.sec { background:#fff; color:var(--accent); }
+  .shop textarea { width:100%; height:9em; margin-top:10px; padding:8px; border:1px solid var(--line); border-radius:6px; font:14px/1.4 ui-monospace,Consolas,monospace; }
+  .shop .ok { color:var(--muted); font-size:13px; }
+  @media print { .shop { display:none; } }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="index.html">← Indice</a>
+  <div class="testa">
+    <div>
+      <h1>Пататник rodopiano con formaggio</h1>
+      <p class="sub">Tortino di patate grattugiate, menta e sirene, cotto in padella e girato a metà cottura.</p>
+      <p class="meta">4 porzioni · Preparazione 30 min · Cottura 30 min · Difficoltà media · Fonte: ricetta di famiglia; cottura da fonti bulgare (vedi note)</p>
+    </div>
+    <!-- Foto: quadratino a lato del titolo; clic = foto grande su Commons. Se non si carica (offline) sparisce -->
+    <figure class="foto">
+      <a href="https://commons.wikimedia.org/wiki/File:Patatnik.jpg" title="Apri la foto grande su Wikimedia Commons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Patatnik.jpg/330px-Patatnik.jpg"
+             width="330" height="248" alt="Patatnik, piatto tradizionale bulgaro"
+             onerror="this.closest('figure').remove()"></a>
+      <figcaption>Foto: <a href="https://commons.wikimedia.org/wiki/File:Patatnik.jpg">K kapustin</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.it">CC BY-SA 3.0</a></figcaption>
+    </figure>
+  </div>
+
+  <div class="controls">
+    <div class="servings">
+      <span>Porzioni</span>
+      <button type="button" id="minus" aria-label="Meno porzioni">−</button>
+      <input type="number" id="srv" min="1" max="40" value="4">
+      <button type="button" id="plus" aria-label="Più porzioni">+</button>
+    </div>
+    <div class="units">
+      <span>Unità:</span>
+      <label><input type="radio" name="u" value="both" checked> grammi + cucchiai</label>
+      <label><input type="radio" name="u" value="g"> solo grammi/ml</label>
+      <label><input type="radio" name="u" value="spoon"> solo cucchiai</label>
+    </div>
+  </div>
+
+  <h2>Ingredienti</h2>
+  <table id="ing"></table>
+  <p class="nutri" id="nutri"></p>
+
+  <div class="shop">
+    <button type="button" id="shopCopy">Copia lista della spesa</button>
+    <button type="button" id="shopShare" class="sec">Invia (Telegram…)</button>
+    <span class="ok" id="shopOk"></span>
+    <textarea id="shopTxt" readonly aria-label="Lista della spesa"></textarea>
+  </div>
+
+  <h2>Occorrente</h2>
+  <ul class="occ">
+    <li>pelapatate</li>
+    <li>grattugia a fori grossi</li>
+    <li>canovaccio pulito</li>
+    <li>ciotola capiente</li>
+    <li>padella antiaderente 26–28 cm con coperchio</li>
+    <li>piatto largo o coperchio piatto (per girarlo)</li>
+  </ul>
+
+  <h2>Procedimento</h2>
+  <ol>
+    <li>Sbuccia le patate (<span class="q" data-ref="patate"></span>) e grattugiale a fori grossi. Mescolale con metà del sale e lascia riposare 10 minuti, poi strizzale bene con le mani o in un canovaccio pulito e butta l'acqua.</li>
+    <li>Grattugia la cipolla con i fori larghi, come le patate, e sbriciola il sirene; grattugia il kashkaval se lo usi.</li>
+    <li>Unisci patate, cipolla, uova sbattute, formaggio, menta, pepe e il resto del sale. Mescola finché il composto è omogeneo.</li>
+    <li>In una padella antiaderente da 26–28 cm, a fuoco medio, scalda metà dell'olio con metà del burro. Quando il burro si è sciolto versa il composto e stendilo in uno strato di circa 2 cm, premendolo leggermente.</li>
+    <li>Abbassa a fuoco <b>medio-basso</b>, copri e cuoci <b>10–15 minuti</b>. La padella non deve essere troppo calda, altrimenti il fondo brucia prima che l'interno sia cotto. Giralo quando i bordi cominciano a dorare.</li>
+    <li>Rovescia il tortino su un piatto largo o un coperchio. Metti in padella il resto dell'olio e del burro, lascia sciogliere e fai scivolare dentro il tortino sul lato crudo.</li>
+    <li>Cuoci <b>coperto</b> altri <b>10–15 minuti</b>, finché anche il secondo lato è dorato. Lascia riposare qualche minuto e taglia a spicchi.</li>
+  </ol>
+
+  <div class="note">
+    <b>Padella:</b> per 4 porzioni serve una padella da 26–28 cm. Se aumenti molto le porzioni, cuoci in più padelle, oppure fai un patatnik per persona in padelle piccole.<br>
+    <b>Gyosum</b> (гьозум): menta selvatica rodopiana; la mentuccia (nepitella) è il sostituto più vicino.<br>
+    <b>Burro:</b> mai da solo sul fondo, sempre insieme all'olio, perché brucia in fretta e rende il tortino amaro. In alternativa, come a Trigrad, solo olio sul fondo e qualche fiocchetto di burro sopra prima di coprire.<br>
+    <b>Più croccante:</b> a Trigrad il secondo lato si cuoce <b>scoperto</b>, per circa 10 minuti.<br>
+    <b>Al forno:</b> teglia unta, 180 °C, 40–50 minuti.<br>
+    <b>Tempi:</b> sono indicativi; regolati sulla doratura dei bordi.<br>
+    <b>Cottura secondo:</b> <a href="https://epochtimes.bg/vkusen-rodopski-patatnik-na-tigan-lesna-recepta/">Epoch Times Bulgaria</a>, con indicazioni da <a href="https://recepti.gotvach.bg/r-152585-%D0%9F%D0%B0%D1%82%D0%B0%D1%82%D0%BD%D0%B8%D0%BA_%D0%BE%D1%82_%D0%A2%D1%80%D0%B8%D0%B3%D1%80%D0%B0%D0%B4">Gotvach.bg (Trigrad)</a>, <a href="https://www.bonapeti.bg/recepti/patatnik1/">Bon Apeti</a> e <a href="https://www.kaufland.bg/recepti/tursene-recepti/recepta-detail.%D0%BF%D0%B0%D1%82%D0%B0%D1%82%D0%BD%D0%B8%D0%BA.r_id=BG_242.html">Kaufland</a>.
+  </div>
+</main>
+
+<script id="meta" type="application/json">
+{ "nome":"Patatnik rodopiano con formaggio", "categoria":"Secondi", "tempo":"60 min", "porzioni":4, "difficolta":"Media", "tag":["patate","formaggio","bulgaria","vegetariano"] }
+</script>
+<script>
+// base: 4 porzioni. g = grammi/ml; spoon = [quantità, "cucchiaio"|"cucchiaino"]; round = 'int' per pezzi
+const BASE = 4;
+const ING = [
+  { key:"patate",  shop:"patate", name:"patate", g:1000, unit:"g", nut:[80,2,17,0.1] },
+  { key:"cipolla", shop:"cipolla", name:"cipolla media", pcs:1, gEach:120, step:0.5, nut:[40,1.1,9,0.1] },
+  { key:"uova",    shop:"uova", name:"uova", pcs:3, gEach:55, step:1, nut:[143,12.6,0.7,9.5] },
+  { key:"sirene",  shop:"sirene", alt:["feta"], name:"sirene (formaggio bianco bulgaro; in alternativa feta)", g:150, unit:"g", nut:[264,14,4,21] },
+  { key:"kash",    shop:"kashkaval", alt:["caciocavallo","provolone dolce"], name:"kashkaval grattugiato (in alternativa caciocavallo o provolone dolce)", g:50, unit:"g", opt:true, nut:[350,25,2,27] },
+  { key:"menta",   shop:"mentuccia fresca", alt:["gyosum"], name:"gyosum o mentuccia fresca, tritata", g:3, unit:"g", spoon:[1,"cucchiaio"], nut:[44,3.3,5,0.7] },
+  { key:"sale",    shop:"sale", name:"sale (meno se il sirene è molto sapido)", g:5, unit:"g", spoon:[1,"cucchiaino"], nut:[0,0,0,0] },
+  { key:"pepe",    shop:"pepe nero", name:"pepe nero macinato", g:1, unit:"g", spoon:[0.5,"cucchiaino"], nut:[251,10,39,3.3] },
+  { key:"olio",    shop:"olio di semi", name:"olio di semi", g:60, unit:"ml", spoon:[4,"cucchiaio"], nut:[820,0,0,92] },
+  { key:"burro",   shop:"burro", name:"burro", g:20, unit:"g", nut:[717,0.9,0.1,81] }
+];
+
+const srv = document.getElementById('srv');
+const tbl = document.getElementById('ing');
+
+function fmtNum(x){
+  if (x >= 100) return String(Math.round(x/5)*5);
+  if (x >= 10) return String(Math.round(x));
+  const r = Math.round(x*10)/10;
+  return String(r).replace('.', ',');
+}
+function fmtSpoon(n, kind){
+  // arrotonda a 1/4
+  const q = Math.max(0.25, Math.round(n*4)/4);
+  const whole = Math.floor(q), frac = q - whole;
+  const fr = {0:"",0.25:"¼",0.5:"½",0.75:"¾"}[frac];
+  const num = (whole ? whole : "") + fr || "¼";
+  const plural = q > 1 ? (kind === "cucchiaio" ? "cucchiai" : "cucchiaini") : kind;
+  return num + " " + plural;
+}
+function pcsRound(n, step){
+  step = step || 1;
+  return Math.max(step, Math.round(n/step)*step);
+}
+function fmtPcs(n, step){
+  const r = pcsRound(n, step);
+  const whole = Math.floor(r), half = r - whole >= 0.5;
+  return (whole ? whole : "") + (half ? "½" : "");
+}
+
+function render(){
+  let s = parseInt(srv.value, 10);
+  if (!s || s < 1) s = 1;
+  const f = s / BASE;
+  const mode = document.querySelector('input[name=u]:checked').value;
+  let html = "";
+  const qtyOf = {};
+  for (const i of ING){
+    let main = "", alt = "";
+    if (i.pcs !== undefined){
+      main = fmtPcs(i.pcs * f, i.step);
+      alt = "≈ " + fmtNum(pcsRound(i.pcs*f, i.step) * i.gEach) + " g";
+      if (mode === "spoon") alt = "";
+    } else {
+      const g = fmtNum(i.g * f) + " " + i.unit;
+      if (i.spoon){
+        const sp = fmtSpoon(i.spoon[0] * f, i.spoon[1]);
+        if (mode === "g") main = g;
+        else if (mode === "spoon") main = sp;
+        else { main = g; alt = sp; }
+      } else main = g;
+    }
+    qtyOf[i.key] = main;
+    html += `<tr><td class="qty">${main}${alt ? ` <span class="alt">(${alt})</span>` : ""}</td>` +
+            `<td>${i.name}${i.opt ? ' <span class="opt">— facoltativo</span>' : ""}</td></tr>`;
+  }
+  tbl.innerHTML = html;
+  document.querySelectorAll('[data-ref]').forEach(el => el.textContent = qtyOf[el.dataset.ref]);
+}
+
+document.getElementById('minus').onclick = () => { srv.value = Math.max(1, (parseInt(srv.value,10)||1) - 1); render(); };
+document.getElementById('plus').onclick  = () => { srv.value = Math.min(40, (parseInt(srv.value,10)||0) + 1); render(); };
+srv.addEventListener('input', render);
+document.querySelectorAll('input[name=u]').forEach(r => r.addEventListener('change', render));
+
+// ---- Lista della spesa (testo semplice) ----
+const NOME = JSON.parse(document.getElementById('meta').textContent).nome;
+const shopBox = document.getElementById('shopTxt');
+function shopName(i){
+  const n = i.shop || i.name.replace(/\s*\(.*?\)/g,'').split(',')[0].trim(), a = i.alt || [];
+  return a.length ? n + " (o " + (a.length > 1 ? a.slice(0, -1).join(", ") + " o " + a[a.length - 1] : a[0]) + ")" : n;
+}
+function fmtQty(v, unit){
+  if (v >= 1000) return String(Math.round(v/100)/10).replace('.', ',') + (unit === "ml" ? " l" : " kg");
+  return fmtNum(v) + " " + unit;
+}
+function shopText(){
+  let s = parseInt(srv.value, 10); if (!s || s < 1) s = 1;
+  const f = s / BASE;
+  const lines = ING.map(i => "• " + shopName(i) + ": " +
+    (i.pcs !== undefined ? fmtPcs(i.pcs*f, i.step) : fmtQty(i.g*f, i.unit)) + (i.opt ? " (facoltativo)" : ""));
+  return "Lista della spesa\n" + NOME + " (" + s + " porzioni)\n\n" + lines.join("\n");
+}
+function updShop(){ shopBox.value = shopText(); }
+function flash(m){ const o = document.getElementById('shopOk'); o.textContent = m; setTimeout(() => o.textContent = "", 2500); }
+document.getElementById('shopCopy').onclick = async () => {
+  let ok = false;
+  try { await navigator.clipboard.writeText(shopBox.value); ok = true; }
+  catch(e){ shopBox.select(); try { ok = document.execCommand('copy'); } catch(e2){} }
+  flash(ok ? "Copiata!" : "Selezionala e copiala a mano");
+};
+document.getElementById('shopShare').onclick = async () => {
+  const t = shopBox.value;
+  // Il menu di condivisione di sistema solo su telefono/tablet: su Windows non elenca Telegram
+  const mobile = /Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && matchMedia('(pointer: coarse)').matches);
+  if (mobile && navigator.share) { navigator.share({ text: t }).catch(() => {}); return; }
+  // Su PC: copia il testo (riserva) e apri la condivisione di Telegram (app desktop o Telegram Web) col testo già pronto
+  try { await navigator.clipboard.writeText(t); } catch(e){ shopBox.select(); try { document.execCommand('copy'); } catch(e2){} }
+  flash("Scegli la chat in Telegram (il testo è anche copiato)");
+  window.open("https://t.me/share/url?url=" + encodeURIComponent(t), "_blank");
+};
+srv.addEventListener('input', updShop);
+document.getElementById('minus').addEventListener('click', updShop);
+document.getElementById('plus').addEventListener('click', updShop);
+render();
+updShop();
+</script>
+<script>
+// ---- Valori nutrizionali a porzione (stima) ----
+// nut = [kcal, proteine, carboidrati, grassi] per 100 g (per 100 ml se unit è "ml"); resa = parte che si mangia (default 1)
+(() => {
+  const somma = list => list.reduce((s, i) => {
+    const q = (i.pcs !== undefined ? i.pcs * i.gEach : i.g) * (i.resa ?? 1) / BASE / 100;
+    return s.map((v, k) => v + i.nut[k] * q);
+  }, [0, 0, 0, 0]);
+  const conNut = ING.filter(i => i.nut);
+  if (!conNut.length) return;
+  const kc = x => Math.round(x / 10) * 10, g = x => Math.round(x);
+  const [kcal, p, c, gr] = somma(conNut.filter(i => !i.opt));
+  let html = `<b>A porzione: ${kc(kcal)} kcal</b> · proteine ${g(p)} g · carboidrati ${g(c)} g · grassi ${g(gr)} g` +
+             ` <span class="opt">(stima indicativa, da tabelle per ingredienti crudi)</span>`;
+  for (const i of conNut.filter(i => i.opt))
+    html += `<br><span class="opt">+ ${kc(somma([i])[0])} kcal con ${i.shop} (facoltativo)</span>`;
+  document.getElementById('nutri').innerHTML = html;
+})();
+</script>
+</body>
+</html>

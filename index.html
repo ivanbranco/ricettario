@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il mio ricettario</title>
+<style>
+  :root { --ink:#222; --muted:#666; --accent:#8a4b16; --bg:#fbf8f3; --line:#e4dccf; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.55 Georgia, "Times New Roman", serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+  h1 { font-size: 1.9rem; margin: 0 0 16px; }
+  h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-top: 28px; }
+  #q { width:100%; padding:10px 12px; font-size:16px; border:1px solid var(--line); border-radius:8px; }
+  ul { list-style:none; padding:0; margin:0; }
+  li { display:flex; align-items:center; gap:10px; border-bottom:1px dotted var(--line); }
+  li a { display:flex; align-items:center; gap:12px; flex:1; padding:8px 4px; color:var(--ink); text-decoration:none; }
+  /* Miniatura: posto riservato anche senza foto, così i nomi restano allineati */
+  .th { flex:none; width:48px; height:48px; border-radius:6px; background:#f1ebe1; overflow:hidden; }
+  .th img { display:block; width:100%; height:100%; object-fit:cover; }
+  li a:hover { background:#fff; }
+  li input[type=checkbox] { width:20px; height:20px; accent-color:var(--accent); }
+  li .s { width:52px; padding:4px; font-size:15px; text-align:center; border:1px solid var(--line); border-radius:6px; visibility:hidden; }
+  li.sel .s { visibility:visible; }
+  li.sel { background:#fff; }
+  #shop { position:sticky; bottom:0; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin-top:24px; font:15px system-ui,sans-serif; box-shadow:0 -2px 10px rgba(0,0,0,.06); }
+  #shop[hidden] { display:none; }
+  #shop button { padding:8px 14px; border:1px solid var(--accent); background:var(--accent); color:#fff; border-radius:8px; font-size:15px; cursor:pointer; margin-right:8px; }
+  #shop button.sec { background:#fff; color:var(--accent); }
+  #shop textarea { width:100%; height:10em; margin-top:10px; padding:8px; border:1px solid var(--line); border-radius:6px; font:14px/1.4 ui-monospace,Consolas,monospace; }
+  #ok { color:var(--muted); font-size:13px; }
+  .info { display:block; font:13px system-ui,sans-serif; color:var(--muted); }
+  #count { font:13px system-ui,sans-serif; color:var(--muted); margin-top:8px; }
+  .filtro { margin-top:10px; font:14px system-ui,sans-serif; }
+  .filtro summary { cursor:pointer; color:var(--accent); }
+  .filtro .hint { margin:6px 0 0; font-size:13px; color:var(--muted); }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .chips button { padding:4px 10px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; font-size:14px; cursor:pointer; }
+  .chips button.grigio { color:#aaa; border-style:dotted; }
+  .chips button[data-s=si] { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .chips button[data-s=no] { background:#fff; border-color:#a33; color:#a33; text-decoration:line-through; }
+  .chips button.reset { border-style:dashed; color:var(--muted); text-decoration:none; }
+  .veg { margin-left:6px; font-size:.9em; cursor:help; }
+  .diff { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:10px; font:14px system-ui,sans-serif; }
+  .diff .lab { color:var(--muted); margin-right:2px; }
+  .diff .chips { margin-top:0; }
+  .dots { color:var(--accent); letter-spacing:1px; cursor:help; }
+  .diff button .dots { cursor:inherit; }
+  .chips button[data-s=si] .dots { color:inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Il mio ricettario</h1>
+  <input id="q" type="search" placeholder="Cerca nome, tag o ingredienti (es. pepe nero, sale)…" aria-label="Cerca">
+  <div class="diff"><span class="lab">Difficoltà:</span><div id="diff" class="chips"></div></div>
+  <details id="ingf" class="filtro">
+    <summary>Filtra per ingrediente <span id="ingn"></span></summary>
+    <p class="hint">Clic: <b>lo voglio</b> → <b>mi manca</b> (barrato) → neutro. I grigi non restringerebbero la ricerca: un clic li segna subito come mancanti. Una ricetta resta se ti manca solo un facoltativo o se hai un'alternativa.</p>
+    <div id="chips" class="chips"></div>
+  </details>
+  <div id="count"></div>
+  <div id="list"></div>
+  <div id="shop" hidden>
+    <b id="shopHead"></b><br><br>
+    <button type="button" id="copy">Copia lista della spesa</button>
+    <button type="button" id="share" class="sec">Invia (Telegram…)</button>
+    <button type="button" id="clear" class="sec">Svuota</button>
+    <span id="ok"></span>
+    <textarea id="txt" readonly aria-label="Lista della spesa"></textarea>
+  </div>
+</main>
+<script>
+// Aggiungi una riga per ogni nuova ricetta (stessi dati del blocco meta della ricetta).
+const RICETTE = [
+  { file:"cacio-e-pepe.html", nome:"Spaghetti cacio e pepe", categoria:"Primi", tempo:"30 min", porzioni:4, difficolta:"Media", tag:["pasta","pecorino","romana"],
+    foto:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Tonnarelli_cacio_e_pepe.jpg/120px-Tonnarelli_cacio_e_pepe.jpg", fotoCrediti:"Foto: Camelia.boban, CC BY-SA 4.0 (Wikimedia Commons)",
+    // ing = ingredienti per `porzioni` porzioni, copiati dall'array ING della ricetta: shop = nome breve per la spesa
+    // alt = alternative valide in questa ricetta (filtro e lista della spesa le mostrano come "(o …)")
+    ing:[ {shop:"spaghettoni", alt:["tonnarelli","spaghetti","linguine"], g:320, unit:"g"}, {shop:"pecorino romano", g:200, unit:"g"}, {shop:"pepe nero", g:5, unit:"g"} ] },
+  { file:"patatnik.html", nome:"Patatnik rodopiano con formaggio", categoria:"Secondi", tempo:"60 min", porzioni:4, difficolta:"Media", tag:["patate","formaggio","bulgaria","vegetariano"],
+    // foto (facoltativa) = miniatura 120px della stessa foto della ricetta; crediti mostrati al passaggio del mouse
+    foto:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Patatnik.jpg/120px-Patatnik.jpg", fotoCrediti:"Foto: K kapustin, CC BY-SA 3.0 (Wikimedia Commons)",
+    ing:[ {shop:"patate", g:1000, unit:"g"}, {shop:"cipolla", pcs:1, step:0.5}, {shop:"uova", pcs:3, step:1},
+          {shop:"sirene", alt:["feta"], g:150, unit:"g"}, {shop:"kashkaval", alt:["caciocavallo","provolone dolce"], g:50, unit:"g", opt:true},
+          {shop:"mentuccia fresca", alt:["gyosum"], g:3, unit:"g"}, {shop:"sale", g:5, unit:"g"}, {shop:"pepe nero", g:1, unit:"g"},
+          {shop:"olio di semi", g:60, unit:"ml"}, {shop:"burro", g:20, unit:"g"} ] },
+  { file:"avocado-caprese.html", nome:"Avocado caprese", categoria:"Contorni", tempo:"30 min", porzioni:4, difficolta:"Facile", tag:["insalata","avocado","mozzarella","pomodorini","senza cottura","bulgaria","vegetariano"],
+    ing:[ {shop:"avocado", pcs:2, step:0.5}, {shop:"pomodorini", g:300, unit:"g"}, {shop:"mozzarelline", g:250, unit:"g"},
+          {shop:"songino", g:60, unit:"g"}, {shop:"limone", pcs:1, step:0.5}, {shop:"olio extravergine d'oliva", g:50, unit:"ml"},
+          {shop:"basilico fresco", g:10, unit:"g"}, {shop:"pinoli", alt:["pistacchi non salati"], g:20, unit:"g", opt:true},
+          {shop:"sale", g:3, unit:"g"}, {shop:"pepe nero", g:1, unit:"g"} ] },
+  { file:"pasta-crema-broccolo-romanesco.html", nome:"Pasta con crema di broccolo romanesco e pangrattato", categoria:"Primi", tempo:"40 min", porzioni:4, difficolta:"Facile", tag:["pasta","broccolo romanesco","verdure","vegetariano"],
+    ing:[ {shop:"rigatoni", alt:["mezze maniche","penne"], g:320, unit:"g"}, {shop:"broccolo romanesco", g:900, unit:"g"},
+          {shop:"pangrattato", g:40, unit:"g"}, {shop:"olio extravergine d'oliva", g:60, unit:"ml"}, {shop:"aglio", pcs:1, step:1},
+          {shop:"peperoncino", pcs:1, step:1, opt:true}, {shop:"parmigiano reggiano", alt:["grana padano","pecorino romano"], g:40, unit:"g", opt:true},
+          {shop:"sale", g:5, unit:"g"} ] }
+];
+const ORDINE = ["Primi","Secondi","Contorni","Dolci","Lievitati","Altro"];
+const q = document.getElementById('q');
+// ---- Filtro per ingrediente ("lo voglio"): mostra le ricette che contengono TUTTI gli ingredienti scelti ----
+const ING_SEL = new Set();
+// Nomi con cui una ricetta "contiene" un ingrediente: il nome principale più le sue alternative
+const nomiIng = r => r.ing.flatMap(i => [i.shop, ...(i.alt || [])]);
+const haIng = (r, n) => r.ing.some(i => i.shop === n || (i.alt || []).includes(n));
+const oLista = a => a.length > 1 ? a.slice(0, -1).join(", ") + " o " + a[a.length - 1] : a[0];
+const TUTTI_ING = [...new Set(RICETTE.flatMap(nomiIng))].sort((a,b) => a.localeCompare(b, "it"));
+// ---- "Mi manca" (stesso filtro, terzo stato): nasconde le ricette con un ingrediente
+//      non facoltativo di cui manca anche ogni alternativa ----
+const ING_NO = new Set();
+const manca = r => r.ing.some(i => !i.opt && [i.shop, ...(i.alt || [])].every(n => ING_NO.has(n)));
+// Solo questi possono essere "mi manca": segnare un ingrediente sempre facoltativo non cambierebbe nulla
+const NON_OPT = new Set(RICETTE.flatMap(r => r.ing.filter(i => !i.opt).flatMap(i => [i.shop, ...(i.alt || [])])));
+const chipsEl = document.getElementById('chips');
+// base = ricette prima di "mi manca": decide QUALI pulsanti si vedono, così l'elenco non cambia mentre segni ciò che manca.
+// rs = ricette visibili: un pulsante neutro è grigio se sceglierlo non restringerebbe la ricerca (presente in nessuna o in tutte).
+function renderChips(rs, base){
+  const nomi = new Set(base.flatMap(nomiIng));
+  chipsEl.innerHTML = TUTTI_ING.filter(n => nomi.has(n) || ING_SEL.has(n) || ING_NO.has(n)).map(n => {
+    const s = ING_SEL.has(n) ? "si" : ING_NO.has(n) ? "no" : "", c = rs.filter(r => haIng(r, n)).length;
+    const grigio = !s && (c === 0 || c === rs.length);
+    return `<button type="button" data-i="${n}" data-s="${s}" class="${grigio ? "grigio" : ""}" aria-pressed="${!!s}"` +
+           `${s ? ` title="${s === "si" ? "Lo voglio" : "Mi manca"}"` : ""}>${n}</button>`;
+  }).join("") + (ING_SEL.size || ING_NO.size ? `<button type="button" class="reset" data-reset="1">Azzera</button>` : "");
+  const p = [ING_SEL.size && ING_SEL.size + " sì", ING_NO.size && ING_NO.size + " mi manca"].filter(Boolean);
+  document.getElementById('ingn').textContent = p.length ? "(" + p.join(", ") + ")" : "";
+}
+// Ciclo: neutro → lo voglio → mi manca → neutro. Grigi: neutro → mi manca. Sempre facoltativi: niente "mi manca".
+chipsEl.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const n = b.dataset.i;
+  if (b.dataset.reset) { ING_SEL.clear(); ING_NO.clear(); }
+  else if (ING_SEL.has(n)) { ING_SEL.delete(n); if (NON_OPT.has(n)) ING_NO.add(n); }
+  else if (ING_NO.has(n)) ING_NO.delete(n);
+  else if (b.classList.contains('grigio') && NON_OPT.has(n)) ING_NO.add(n);
+  else ING_SEL.add(n);
+  render();
+});
+const isVegan = r => r.tag.includes("vegano");
+// ---- Difficoltà: pallini accanto al nome e filtro (nessuno scelto = tutte; più scelti = una qualsiasi) ----
+const DIFF = ["Facile","Media","Difficile"];
+const PALLINI = { Facile:"●○○", Media:"●●○", Difficile:"●●●" };
+const DIFF_SEL = new Set();
+const diffEl = document.getElementById('diff');
+function renderDiff(){
+  diffEl.innerHTML = DIFF.map(d => `<button type="button" data-d="${d}" data-s="${DIFF_SEL.has(d) ? "si" : ""}" aria-pressed="${DIFF_SEL.has(d)}">` +
+    `<span class="dots" aria-hidden="true">${PALLINI[d]}</span> ${d}</button>`).join("");
+}
+diffEl.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const d = b.dataset.d;
+  DIFF_SEL.has(d) ? DIFF_SEL.delete(d) : DIFF_SEL.add(d);
+  renderDiff(); render();
+});
+function render(){
+  // Più termini separati da virgola (o "+"): la ricetta deve contenerli tutti
+  const terms = q.value.toLowerCase().split(/[,+;]/).map(s => s.trim()).filter(Boolean);
+  const base = RICETTE.filter(r => terms.every(t => (r.nome + " " + r.categoria + " " + r.tag.join(" ") + " " + nomiIng(r).join(" ")).toLowerCase().includes(t))
+    && [...ING_SEL].every(n => haIng(r, n)) && (!DIFF_SEL.size || DIFF_SEL.has(r.difficolta)));
+  const rs = base.filter(r => !manca(r));
+  const cats = [...new Set(rs.map(r => r.categoria))].sort((a,b) => ORDINE.indexOf(a) - ORDINE.indexOf(b));
+  let html = "";
+  for (const c of cats){
+    html += `<h2>${c}</h2><ul>`;
+    for (const r of rs.filter(x => x.categoria === c).sort((a,b) => a.nome.localeCompare(b.nome, "it")))
+      html += `<li class="${SEL[r.file] ? "sel" : ""}"><input type="checkbox" data-f="${r.file}" aria-label="Aggiungi alla lista della spesa" ${SEL[r.file] ? "checked" : ""}>` +
+              `<a href="${r.file}"><span class="th">${r.foto ? `<img src="${r.foto}" alt="" loading="lazy" title="${r.fotoCrediti || ""}" onerror="this.remove()">` : ""}</span>` +
+              `<span>${r.nome}${isVegan(r) ? '<span class="veg" title="Vegana" aria-label="Vegana">🌱</span>' : ""}<span class="info">${r.tempo} · ${r.porzioni} porzioni · <span class="dots" title="Difficoltà ${r.difficolta.toLowerCase()}">${PALLINI[r.difficolta] || ""}</span> ${r.difficolta}</span></span></a>` +
+              `<input class="s" type="number" min="1" max="40" data-s="${r.file}" value="${SEL[r.file] || 2}" aria-label="Porzioni"></li>`;
+    html += "</ul>";
+  }
+  document.getElementById('list').innerHTML = html || "<p>Nessuna ricetta trovata.</p>";
+  document.getElementById('count').textContent = rs.length + " ricett" + (rs.length === 1 ? "a" : "e");
+  renderChips(rs, base);
+}
+
+// ---- Lista della spesa: spunta le ricette, scegli le porzioni, copia il testo ----
+const SEL = {};   // file -> porzioni
+const fmtNum = x => x >= 100 ? String(Math.round(x/5)*5) : x >= 10 ? String(Math.round(x)) : String(Math.round(x*10)/10).replace('.', ',');
+const fmtQty = (v, u) => v >= 1000 ? String(Math.round(v/100)/10).replace('.', ',') + (u === "ml" ? " l" : " kg") : fmtNum(v) + " " + u;
+function fmtPcs(n){ const r = Math.round(n*2)/2, w = Math.floor(r); return (w || (r ? "" : "1")) + (r - w ? "½" : ""); }
+function shopText(){
+  const tot = new Map(), titoli = [];
+  for (const r of RICETTE){
+    const s = SEL[r.file]; if (!s) continue;
+    titoli.push(r.nome + " (" + s + ")");
+    for (const i of r.ing){
+      const pcs = i.pcs !== undefined, unit = pcs ? "pz" : i.unit, k = i.shop + "|" + unit;
+      const e = tot.get(k) || { shop:i.shop, unit, v:0, opt:true, alt:new Set() };
+      for (const a of i.alt || []) e.alt.add(a);
+      e.v += (pcs ? Math.max(i.step || 1, Math.round(i.pcs * s / r.porzioni / (i.step || 1)) * (i.step || 1)) : i.g * s / r.porzioni);
+      if (!i.opt) e.opt = false;
+      tot.set(k, e);
+    }
+  }
+  const righe = [...tot.values()].sort((a,b) => a.shop.localeCompare(b.shop, "it"))
+    .map(e => "• " + e.shop + (e.alt.size ? " (o " + oLista([...e.alt]) + ")" : "") + ": " + (e.unit === "pz" ? fmtPcs(e.v) : fmtQty(e.v, e.unit)) + (e.opt ? " (facoltativo)" : ""));
+  return "Lista della spesa\n" + titoli.join(", ") + "\n\n" + righe.join("\n");
+}
+function updShop(){
+  const n = Object.keys(SEL).length;
+  document.getElementById('shop').hidden = !n;
+  if (!n) return;
+  document.getElementById('shopHead').textContent = "Lista della spesa · " + n + " ricett" + (n === 1 ? "a" : "e");
+  document.getElementById('txt').value = shopText();
+}
+const flash = m => { const o = document.getElementById('ok'); o.textContent = m; setTimeout(() => o.textContent = "", 2500); };
+const listEl = document.getElementById('list');
+listEl.addEventListener('change', e => {
+  const f = e.target.dataset.f; if (!f) return;
+  if (e.target.checked) SEL[f] = parseInt(listEl.querySelector(`[data-s="${f}"]`).value, 10) || 1; else delete SEL[f];
+  e.target.closest('li').classList.toggle('sel', e.target.checked);
+  updShop();
+});
+listEl.addEventListener('input', e => {
+  const f = e.target.dataset.s; if (!f) return;
+  if (SEL[f]) { SEL[f] = Math.max(1, parseInt(e.target.value, 10) || 1); updShop(); }
+});
+document.getElementById('clear').onclick = () => { for (const k in SEL) delete SEL[k]; render(); updShop(); };
+document.getElementById('copy').onclick = async () => {
+  const box = document.getElementById('txt'); let ok = false;
+  try { await navigator.clipboard.writeText(box.value); ok = true; }
+  catch(e){ box.select(); try { ok = document.execCommand('copy'); } catch(e2){} }
+  flash(ok ? "Copiata!" : "Selezionala e copiala a mano");
+};
+document.getElementById('share').onclick = async () => {
+  const box = document.getElementById('txt'), t = box.value;
+  // Il menu di condivisione di sistema solo su telefono/tablet: su Windows non elenca Telegram
+  if (IS_MOBILE && navigator.share) { navigator.share({ text: t }).catch(() => {}); return; }
+  // Su PC: copia il testo (riserva) e apri la condivisione di Telegram (app desktop o Telegram Web) col testo già pronto
+  try { await navigator.clipboard.writeText(t); } catch(e){ box.select(); try { document.execCommand('copy'); } catch(e2){} }
+  flash("Scegli la chat in Telegram (il testo è anche copiato)");
+  window.open("https://t.me/share/url?url=" + encodeURIComponent(t), "_blank");
+};
+const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && matchMedia('(pointer: coarse)').matches);
+q.addEventListener('input', render);
+renderDiff();
+render();
+</script>
+</body>
+</html>
