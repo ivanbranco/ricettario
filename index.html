@@ -96,7 +96,17 @@ const RICETTE = [
     ing:[ {shop:"rigatoni", alt:["mezze maniche","penne"], g:320, unit:"g"}, {shop:"broccolo romanesco", g:900, unit:"g"},
           {shop:"pangrattato", g:40, unit:"g"}, {shop:"olio extravergine d'oliva", g:60, unit:"ml"}, {shop:"aglio", pcs:1, step:1},
           {shop:"peperoncino", pcs:1, step:1, opt:true}, {shop:"parmigiano reggiano", alt:["grana padano","pecorino romano"], g:40, unit:"g", opt:true},
-          {shop:"sale", g:5, unit:"g"} ] }
+          {shop:"sale", g:5, unit:"g"} ] },
+  { file:"penne-arrabbiata.html", nome:"Penne all'arrabbiata", categoria:"Primi", tempo:"30 min", porzioni:4, difficolta:"Facile", tag:["pasta","pomodoro","piccante","romana","vegetariano","vegano"],
+    foto:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Penne_all%27arrabbiata.jpg/120px-Penne_all%27arrabbiata.jpg", fotoCrediti:"Foto: DC, CC BY-SA 3.0 (Wikimedia Commons)",
+    ing:[ {shop:"penne", alt:["rigatoni","mezze maniche","spaghetti"], g:320, unit:"g"}, {shop:"pomodori pelati", g:400, unit:"g"},
+          {shop:"aglio", pcs:2, step:1}, {shop:"peperoncino", pcs:2, step:1}, {shop:"olio extravergine d'oliva", g:50, unit:"ml"},
+          {shop:"prezzemolo", g:10, unit:"g"}, {shop:"sale", g:5, unit:"g"} ] },
+  { file:"spaghetti-assassina.html", nome:"Spaghetti all'assassina", categoria:"Primi", tempo:"35 min", porzioni:4, difficolta:"Media", tag:["pasta","pomodoro","piccante","pugliese","bari","vegetariano","vegano"],
+    foto:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Spaghetti_all%E2%80%99assassina_recipe.jpg/120px-Spaghetti_all%E2%80%99assassina_recipe.jpg", fotoCrediti:"Foto: ScotInPuglia, CC BY-SA 4.0 (Wikimedia Commons)",
+    ing:[ {shop:"spaghetti", alt:["spaghettoni"], g:320, unit:"g"}, {shop:"passata di pomodoro", g:400, unit:"g"},
+          {shop:"concentrato di pomodoro", g:30, unit:"g"}, {shop:"aglio", pcs:3, step:1}, {shop:"peperoncino", pcs:3, step:1},
+          {shop:"olio extravergine d'oliva", g:80, unit:"ml"}, {shop:"sale", g:8, unit:"g"} ] }
 ];
 const ORDINE = ["Primi","Secondi","Contorni","Dolci","Lievitati","Altro"];
 const q = document.getElementById('q');

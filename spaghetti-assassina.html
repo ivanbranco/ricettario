@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spaghetti all'assassina</title>
+<meta name="description" content="Piatto barese: spaghetti crudi cotti in padella nel brodo di pomodoro, piccanti e volutamente bruciacchiati.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<style>
+  :root { --ink:#222; --muted:#666; --accent:#8a4b16; --bg:#fbf8f3; --line:#e4dccf; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.55 Georgia, "Times New Roman", serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; font-style: italic; }
+  .back { font:14px system-ui,sans-serif; color:var(--accent); text-decoration:none; }
+  .meta { font:14px system-ui,sans-serif; color:var(--muted); margin:-12px 0 20px; }
+  h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-top: 32px; }
+  .controls { display:flex; flex-wrap:wrap; gap:18px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; font-family: system-ui, sans-serif; font-size:15px; }
+  .servings { display:flex; align-items:center; gap:8px; }
+  .servings button { width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--bg); font-size:20px; cursor:pointer; }
+  .servings input { width:56px; text-align:center; font-size:17px; padding:4px; border:1px solid var(--line); border-radius:6px; }
+  .units label { margin-right:10px; cursor:pointer; }
+  table { width:100%; border-collapse: collapse; margin-top: 12px; }
+  td { padding: 7px 4px; border-bottom: 1px dotted var(--line); vertical-align: top; }
+  td.qty { width: 42%; font-weight: bold; white-space: nowrap; }
+  td .alt { font-weight: normal; color: var(--muted); font-size: .9em; }
+  .opt { color: var(--muted); font-size: .9em; }
+  ol li { margin-bottom: 10px; }
+  .q { font-weight: bold; }
+  .note { background:#fff; border-left: 3px solid var(--accent); padding: 10px 14px; margin-top: 12px; font-size: .95em; }
+  /* Occorrente: strumenti necessari, come etichette */
+  .occ { list-style:none; padding:0; margin:12px 0 0; display:flex; flex-wrap:wrap; gap:6px 8px; font:15px system-ui,sans-serif; }
+  .occ li { background:#fff; border:1px solid var(--line); border-radius:999px; padding:3px 12px; }
+  /* Valori nutrizionali a porzione (stima) */
+  .nutri { font:14px/1.5 system-ui,sans-serif; color:var(--muted); margin:10px 0 0; }
+  .nutri b { color:var(--ink); }
+  @media print { .controls button, .back { display:none; } body { background:#fff; } }
+  .shop { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin-top:16px; font-family:system-ui,sans-serif; font-size:15px; }
+  .shop button { padding:8px 14px; border:1px solid var(--accent); background:var(--accent); color:#fff; border-radius:8px; font-size:15px; cursor:pointer; margin-right:8px; }
+  .shop button.sec { background:#fff; color:var(--accent); }
+  .shop textarea { width:100%; height:9em; margin-top:10px; padding:8px; border:1px solid var(--line); border-radius:6px; font:14px/1.4 ui-monospace,Consolas,monospace; }
+  .shop .ok { color:var(--muted); font-size:13px; }
+  @media print { .shop { display:none; } }
+  /* Termini tecnici: sottolineati a tratteggio, spiegazione al passaggio del mouse o al tocco */
+  .term { border-bottom:1px dashed var(--accent); cursor:help; }
+  .term:focus { outline:none; background:#f3e9dc; }
+  .tip { position:fixed; z-index:10; max-width:min(300px, calc(100vw - 16px)); background:#2b2b2b; color:#fff; font:14px/1.45 system-ui,sans-serif; padding:8px 11px; border-radius:7px; box-shadow:0 4px 14px rgba(0,0,0,.2); pointer-events:none; }
+  .tip[hidden] { display:none; }
+  @media print { .term { border-bottom:none; } .tip { display:none; } }
+  .testa { display:flex; gap:18px; align-items:flex-start; }
+  .testa > div { flex:1; min-width:0; }
+  .foto { flex:none; width:132px; margin:6px 0 0; }
+  .foto img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:cover; border-radius:8px; background:var(--line); }
+  .foto figcaption { font:10.5px/1.3 system-ui,sans-serif; color:var(--muted); margin-top:4px; }
+  .foto figcaption a { color:inherit; white-space:nowrap; }
+  @media (max-width:520px) { .foto { width:84px; } }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="index.html">← Indice</a>
+  <div class="testa">
+    <div>
+      <h1>Spaghetti all'assassina</h1>
+      <p class="sub">Piatto barese: spaghetti crudi cotti in padella nel brodo di pomodoro, piccanti e volutamente bruciacchiati.</p>
+      <p class="meta">4 porzioni · Preparazione 10 min · Cottura 25 min · Difficoltà media · Fonti: <a href="https://www.dissapore.com/ricette/spaghetti-all-assassina/">Dissapore</a>, <a href="https://www.scattidigusto.it/spaghetti-all-assassina-la-vera-ricetta">Scatti di Gusto</a></p>
+    </div>
+    <!-- Foto: quadratino a lato del titolo; clic = foto grande su Commons. Se non si carica (offline) sparisce -->
+    <figure class="foto">
+      <a href="https://commons.wikimedia.org/wiki/File:Spaghetti_all%E2%80%99assassina_recipe.jpg" title="Apri la foto grande su Wikimedia Commons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Spaghetti_all%E2%80%99assassina_recipe.jpg/330px-Spaghetti_all%E2%80%99assassina_recipe.jpg"
+             width="330" height="247" alt="Spaghetti all'assassina bruciacchiati in padella"
+             onerror="this.closest('figure').remove()"></a>
+      <figcaption>Foto: <a href="https://commons.wikimedia.org/wiki/File:Spaghetti_all%E2%80%99assassina_recipe.jpg">ScotInPuglia</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it">CC BY-SA 4.0</a></figcaption>
+    </figure>
+  </div>
+
+  <div class="controls">
+    <div class="servings">
+      <span>Porzioni</span>
+      <button type="button" id="minus" aria-label="Meno porzioni">−</button>
+      <input type="number" id="srv" min="1" max="40" value="4">
+      <button type="button" id="plus" aria-label="Più porzioni">+</button>
+    </div>
+    <div class="units" id="units" hidden>
+      <span>Unità:</span>
+      <label><input type="radio" name="u" value="both" checked> grammi + cucchiai</label>
+      <label><input type="radio" name="u" value="g"> solo grammi/ml</label>
+      <label><input type="radio" name="u" value="spoon"> solo cucchiai</label>
+    </div>
+  </div>
+
+  <h2>Ingredienti</h2>
+  <table id="ing"></table>
+  <p class="nutri" id="nutri"></p>
+
+  <div class="shop">
+    <button type="button" id="shopCopy">Copia lista della spesa</button>
+    <button type="button" id="shopShare" class="sec">Invia (Telegram…)</button>
+    <span class="ok" id="shopOk"></span>
+    <textarea id="shopTxt" readonly aria-label="Lista della spesa"></textarea>
+  </div>
+
+  <h2>Occorrente</h2>
+  <ul class="occ">
+    <li>padella di ferro larga (32–36 cm per 4 porzioni)</li>
+    <li>pentola media, per il brodo</li>
+    <li>mestolo</li>
+    <li>pinze da cucina o spatola</li>
+  </ul>
+
+  <h2>Procedimento</h2>
+  <ol>
+    <li><b>Brodo di pomodoro:</b> in una pentola media scalda circa <b>200 ml d'acqua a porzione</b> con ¾ della passata (<span class="q" data-ref="passata"></span> in tutto), il concentrato (<span class="q" data-ref="concentrato"></span>) e il sale (<span class="q" data-ref="sale"></span>). Mescola bene e tienilo caldo a fuoco basso, vicino alla padella: deve restare sempre bollente.</li>
+    <li>Nella padella di ferro scalda l'olio (<span class="q" data-ref="olio"></span>) con l'aglio sbucciato (<span class="q" data-ref="aglio"></span> spicchi) e il peperoncino sbriciolato (<span class="q" data-ref="peperoncino"></span>), a fuoco medio, finché l'aglio è dorato.</li>
+    <li>Versa il quarto di passata rimasto e lascialo sobbollire un paio di minuti, finché si addensa.</li>
+    <li>Adagia gli spaghetti <b>crudi e interi</b> (<span class="q" data-ref="spaghetti"></span>) a raggiera nella padella, in un solo strato il più possibile. Lasciali <span class="term" data-def="Tostare: scaldare un ingrediente in padella con pochissimo grasso finché sprigiona aroma e prende colore; qui la pasta si colora e assorbe il sugo.">tostare</span> nel sugo a fuoco vivace, girandoli con le pinze, finché si ammorbidiscono e cominciano ad attaccarsi.</li>
+    <li>Aggiungi un mestolo di brodo bollente. Quando è assorbito e la pasta inizia ad <b>attaccarsi al fondo e a scurirsi</b>, staccala con la spatola, girala e aggiungi un altro mestolo. Non mescolare di continuo: le parti croccanti e abbrustolite sono il carattere del piatto.</li>
+    <li>Continua così per 15–18 minuti, finché gli spaghetti sono cotti e ben bruciacchiati in più punti. Assaggia e, se serve, aggiusta di sale.</li>
+    <li>Servi subito, ancora sfrigolanti.</li>
+  </ol>
+
+  <div class="note">
+    <b>Bruciacchiato, non bruciato:</b> il fondo deve diventare scuro e croccante, ma se fa fumo nero e odore acre abbassa la fiamma e aggiungi brodo. Le prime volte è normale: con la pratica si trova il punto.<br>
+    <b>Padella:</b> quella di ferro è la tradizionale e fa attaccare la pasta come si deve; in antiaderente viene più facile ma meno abbrustolita. Se fai metà dose, basta una padella da 28 cm. Più porzioni dell'indicato non stanno in una padella: cuocile in due.<br>
+    <b>Pasta:</b> spaghetti spessi o spaghettoni, meglio <b>non trafilati al bronzo</b> (rilasciano troppo amido e si caramellano meno). Non spezzarli.<br>
+    <b>Brodo:</b> potresti non usarlo tutto, o servirne un po' di più: dipende dalla pasta e dalla fiamma. Se finisce, aggiungi acqua bollente.<br>
+    <b>Formaggio:</b> la tradizione non lo prevede. Il piatto così è vegano.<br>
+    <b>Storia:</b> nato a Bari negli anni '60, al ristorante Al Sorso Preferito; dal 2013 l'Accademia dell'Assassina ne difende la versione tradizionale.<br>
+    <b>Conservazione:</b> da mangiare subito.
+  </div>
+</main>
+
+<script id="meta" type="application/json">
+{ "nome":"Spaghetti all'assassina", "categoria":"Primi", "tempo":"35 min", "porzioni":4, "difficolta":"Media", "tag":["pasta","pomodoro","piccante","pugliese","bari","vegetariano","vegano"] }
+</script>
+<script>
+// base: 4 porzioni. g = grammi/ml; spoon = [quantità, "cucchiaio"|"cucchiaino"]; pcs = pezzi (step = arrotondamento)
+const BASE = 4;
+const ING = [
+  { key:"spaghetti",   shop:"spaghetti", alt:["spaghettoni"], name:"spaghetti spessi, non trafilati al bronzo", g:320, unit:"g", nut:[353,12,71,1.5] },
+  { key:"passata",     shop:"passata di pomodoro", name:"passata di pomodoro (¾ per il brodo, ¼ per il sugo in padella)", g:400, unit:"g", nut:[24,1.3,4,0.2] },
+  { key:"concentrato", shop:"concentrato di pomodoro", name:"doppio concentrato di pomodoro, per il brodo", g:30, unit:"g", spoon:[2,"cucchiaio"], nut:[100,5,18,0.4] },
+  { key:"aglio",       shop:"aglio", name:"spicchi d'aglio", pcs:3, gEach:5, step:1, nut:[41,0.9,8.4,0.6] },
+  { key:"peperoncino", shop:"peperoncino", name:"peperoncini secchi piccanti", pcs:3, gEach:3, step:1, nut:[40,1.9,8,0.4] },
+  { key:"olio",        shop:"olio extravergine d'oliva", name:"olio extravergine d'oliva", g:80, unit:"ml", spoon:[5,"cucchiaio"], nut:[820,0,0,91] },
+  { key:"sale",        shop:"sale", name:"sale fino, per il brodo", g:8, unit:"g", spoon:[1.5,"cucchiaino"], nut:[0,0,0,0] }
+];
+
+const srv = document.getElementById('srv');
+const tbl = document.getElementById('ing');
+if (ING.some(i => i.spoon)) document.getElementById('units').hidden = false;
+
+function fmtNum(x){
+  if (x >= 100) return String(Math.round(x/5)*5);
+  if (x >= 10) return String(Math.round(x));
+  const r = Math.round(x*10)/10;
+  return String(r).replace('.', ',');
+}
+function fmtSpoon(n, kind){
+  const q = Math.max(0.25, Math.round(n*4)/4);
+  const whole = Math.floor(q), frac = q - whole;
+  const fr = {0:"",0.25:"¼",0.5:"½",0.75:"¾"}[frac];
+  const num = (whole ? whole : "") + fr || "¼";
+  const plural = q > 1 ? (kind === "cucchiaio" ? "cucchiai" : "cucchiaini") : kind;
+  return num + " " + plural;
+}
+function pcsRound(n, step){
+  step = step || 1;
+  return Math.max(step, Math.round(n/step)*step);
+}
+function fmtPcs(n, step){
+  const r = pcsRound(n, step);
+  const whole = Math.floor(r), half = r - whole >= 0.5;
+  return (whole ? whole : "") + (half ? "½" : "");
+}
+
+function render(){
+  let s = parseInt(srv.value, 10);
+  if (!s || s < 1) s = 1;
+  const f = s / BASE;
+  const mode = document.querySelector('input[name=u]:checked').value;
+  let html = "";
+  const qtyOf = {};
+  for (const i of ING){
+    let main = "", alt = "";
+    if (i.pcs !== undefined){
+      main = fmtPcs(i.pcs * f, i.step);
+      alt = "≈ " + fmtNum(pcsRound(i.pcs*f, i.step) * i.gEach) + " g";
+      if (mode === "spoon") alt = "";
+    } else {
+      const g = fmtNum(i.g * f) + " " + i.unit;
+      if (i.spoon){
+        const sp = fmtSpoon(i.spoon[0] * f, i.spoon[1]);
+        if (mode === "g") main = g;
+        else if (mode === "spoon") main = sp;
+        else { main = g; alt = sp; }
+      } else main = g;
+    }
+    qtyOf[i.key] = main;
+    html += `<tr><td class="qty">${main}${alt ? ` <span class="alt">(${alt})</span>` : ""}</td>` +
+            `<td>${i.name}${i.opt ? ' <span class="opt">— facoltativo</span>' : ""}</td></tr>`;
+  }
+  tbl.innerHTML = html;
+  document.querySelectorAll('[data-ref]').forEach(el => el.textContent = qtyOf[el.dataset.ref]);
+}
+
+document.getElementById('minus').onclick = () => { srv.value = Math.max(1, (parseInt(srv.value,10)||1) - 1); render(); };
+document.getElementById('plus').onclick  = () => { srv.value = Math.min(40, (parseInt(srv.value,10)||0) + 1); render(); };
+srv.addEventListener('input', render);
+document.querySelectorAll('input[name=u]').forEach(r => r.addEventListener('change', render));
+
+// ---- Lista della spesa (testo semplice) ----
+const NOME = JSON.parse(document.getElementById('meta').textContent).nome;
+const shopBox = document.getElementById('shopTxt');
+function shopName(i){
+  const n = i.shop || i.name.replace(/\s*\(.*?\)/g,'').split(',')[0].trim(), a = i.alt || [];
+  return a.length ? n + " (o " + (a.length > 1 ? a.slice(0, -1).join(", ") + " o " + a[a.length - 1] : a[0]) + ")" : n;
+}
+function fmtQty(v, unit){
+  if (v >= 1000) return String(Math.round(v/100)/10).replace('.', ',') + (unit === "ml" ? " l" : " kg");
+  return fmtNum(v) + " " + unit;
+}
+function shopText(){
+  let s = parseInt(srv.value, 10); if (!s || s < 1) s = 1;
+  const f = s / BASE;
+  const lines = ING.map(i => "• " + shopName(i) + ": " +
+    (i.pcs !== undefined ? fmtPcs(i.pcs*f, i.step) : fmtQty(i.g*f, i.unit)) + (i.opt ? " (facoltativo)" : ""));
+  return "Lista della spesa\n" + NOME + " (" + s + " porzioni)\n\n" + lines.join("\n");
+}
+function updShop(){ shopBox.value = shopText(); }
+function flash(m){ const o = document.getElementById('shopOk'); o.textContent = m; setTimeout(() => o.textContent = "", 2500); }
+document.getElementById('shopCopy').onclick = async () => {
+  let ok = false;
+  try { await navigator.clipboard.writeText(shopBox.value); ok = true; }
+  catch(e){ shopBox.select(); try { ok = document.execCommand('copy'); } catch(e2){} }
+  flash(ok ? "Copiata!" : "Selezionala e copiala a mano");
+};
+document.getElementById('shopShare').onclick = async () => {
+  const t = shopBox.value;
+  // Il menu di condivisione di sistema solo su telefono/tablet: su Windows non elenca Telegram
+  const mobile = /Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && matchMedia('(pointer: coarse)').matches);
+  if (mobile && navigator.share) { navigator.share({ text: t }).catch(() => {}); return; }
+  // Su PC: copia il testo (riserva) e apri la condivisione di Telegram (app desktop o Telegram Web) col testo già pronto
+  try { await navigator.clipboard.writeText(t); } catch(e){ shopBox.select(); try { document.execCommand('copy'); } catch(e2){} }
+  flash("Scegli la chat in Telegram (il testo è anche copiato)");
+  window.open("https://t.me/share/url?url=" + encodeURIComponent(t), "_blank");
+};
+srv.addEventListener('input', updShop);
+document.getElementById('minus').addEventListener('click', updShop);
+document.getElementById('plus').addEventListener('click', updShop);
+render();
+updShop();
+</script>
+<script>
+// ---- Termini tecnici: <span class="term" data-def="spiegazione">parola</span> ----
+(() => {
+  const tip = document.createElement('div');
+  tip.className = 'tip'; tip.id = 'tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true;
+  document.body.append(tip);
+  function show(el){
+    tip.textContent = el.dataset.def; tip.hidden = false;
+    const r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    const x = Math.max(8, Math.min(r.left + r.width/2 - w/2, innerWidth - w - 8));
+    const y = r.top - h - 8 < 8 ? r.bottom + 8 : r.top - h - 8;   // sopra la parola, sotto se non c'è spazio
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  const hide = () => { tip.hidden = true; };
+  document.querySelectorAll('.term').forEach(el => {
+    el.tabIndex = 0;                       // tocco su telefono e tastiera
+    el.setAttribute('aria-describedby', 'tip');
+    el.addEventListener('mouseenter', () => show(el));
+    el.addEventListener('mouseleave', () => { if (document.activeElement !== el) hide(); });
+    el.addEventListener('focus', () => show(el));
+    el.addEventListener('blur', hide);
+  });
+  addEventListener('scroll', () => { if (document.activeElement?.classList.contains('term')) document.activeElement.blur(); hide(); }, { passive:true });
+})();
+</script>
+<script>
+// ---- Valori nutrizionali a porzione (stima) ----
+// nut = [kcal, proteine, carboidrati, grassi] per 100 g (per 100 ml se unit è "ml"); resa = parte che si mangia (default 1)
+(() => {
+  const somma = list => list.reduce((s, i) => {
+    const q = (i.pcs !== undefined ? i.pcs * i.gEach : i.g) * (i.resa ?? 1) / BASE / 100;
+    return s.map((v, k) => v + i.nut[k] * q);
+  }, [0, 0, 0, 0]);
+  const conNut = ING.filter(i => i.nut);
+  if (!conNut.length) return;
+  const kc = x => Math.round(x / 10) * 10, g = x => Math.round(x);
+  const [kcal, p, c, gr] = somma(conNut.filter(i => !i.opt));
+  let html = `<b>A porzione: ${kc(kcal)} kcal</b> · proteine ${g(p)} g · carboidrati ${g(c)} g · grassi ${g(gr)} g` +
+             ` <span class="opt">(stima indicativa, da tabelle per ingredienti crudi)</span>`;
+  for (const i of conNut.filter(i => i.opt))
+    html += `<br><span class="opt">+ ${kc(somma([i])[0])} kcal con ${i.shop} (facoltativo)</span>`;
+  document.getElementById('nutri').innerHTML = html;
+})();
+</script>
+</body>
+</html>
