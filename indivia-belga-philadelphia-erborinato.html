@@ -15,6 +15,13 @@
   .sub { color: var(--muted); margin: 0 0 24px; font-style: italic; }
   .back { font:14px system-ui,sans-serif; color:var(--accent); text-decoration:none; }
   .meta { font:14px system-ui,sans-serif; color:var(--muted); margin:-12px 0 20px; }
+  .testa { display:flex; gap:18px; align-items:flex-start; }
+  .testa > div { flex:1; min-width:0; }
+  .foto { flex:none; width:132px; margin:6px 0 0; }
+  .foto img { display:block; width:100%; height:auto; aspect-ratio:1; object-fit:cover; border-radius:8px; background:var(--line); }
+  .foto figcaption { font:10.5px/1.3 system-ui,sans-serif; color:var(--muted); margin-top:4px; }
+  .foto figcaption a { color:inherit; white-space:nowrap; }
+  @media (max-width:520px) { .foto { width:84px; } }
   h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-top: 32px; }
   .controls { display:flex; flex-wrap:wrap; gap:18px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; font-family: system-ui, sans-serif; font-size:15px; }
   .servings { display:flex; align-items:center; gap:8px; }
@@ -47,9 +54,21 @@
 <body>
 <main>
   <a class="back" href="index.html">← Indice</a>
-  <h1>Indivia belga con Philadelphia erborinato</h1>
-  <p class="sub">Foglie di indivia belga croccanti e appena sciacquate, usate come barchette per un cucchiaino di Philadelphia erborinato: amaro, fresco e cremoso in un boccone.</p>
-  <p class="meta">4 porzioni (antipasto o spuntino) · Preparazione 5 min · Nessuna cottura · Difficoltà facile · Fonte: ricetta di casa</p>
+  <div class="testa">
+    <div>
+      <h1>Indivia belga con Philadelphia erborinato</h1>
+      <p class="sub">Foglie di indivia belga croccanti e appena sciacquate, usate come barchette per un cucchiaino di Philadelphia erborinato: amaro, fresco e cremoso in un boccone.</p>
+      <p class="meta">4 porzioni (antipasto o spuntino) · Preparazione 5 min · Nessuna cottura · Difficoltà facile · Fonte: ricetta di casa</p>
+    </div>
+    <!-- Foto: quadratino a lato del titolo; clic = foto grande su Commons. Se non si carica (offline) sparisce -->
+    <figure class="foto">
+      <a href="https://commons.wikimedia.org/wiki/File:Course_1_-_Endive_bites_(8331230705).jpg" title="Apri la foto grande su Wikimedia Commons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Course_1_-_Endive_bites_%288331230705%29.jpg/330px-Course_1_-_Endive_bites_%288331230705%29.jpg"
+             width="330" height="442" alt="Foglie di indivia disposte a raggiera su un piatto, farcite con formaggio bianco e frutta secca"
+             onerror="this.closest('figure').remove()"></a>
+      <figcaption>Foto: <a href="https://commons.wikimedia.org/wiki/File:Course_1_-_Endive_bites_(8331230705).jpg">Karen e Brad Emerson</a>, <a href="https://creativecommons.org/licenses/by/2.0/deed.it">CC BY 2.0</a></figcaption>
+    </figure>
+  </div>
 
   <div class="controls">
     <div class="servings">
